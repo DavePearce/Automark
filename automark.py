@@ -1,15 +1,22 @@
 # -*-python-*-
 
 # ============================================================
+# Mako Config
+# ============================================================
+
+from mako.template import Template
+from mako.lookup import TemplateLookup
+lookup = TemplateLookup(directories=['templates'])
+
+# ============================================================
 # Automark Application
 # ============================================================
 
 class Automark:
     def index(self):
-        return "<h1>Automark</h1>"
-    def test(self,rest,argument=None):
-        return "<h1>TEST</h1>" + argument + "<br>" + rest
+        template = lookup.get_template("index.html")
+        return template.render()
     index.exposed = True
-    test.exposed = True
     
+
 
