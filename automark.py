@@ -27,10 +27,14 @@ class Automark:
         return serve_file(abspath, "image/png")
 
     # gives access to js/
-    def fs(self, filename):
+    def js(self, filename):
         abspath = os.path.abspath("js/" + filename)
         return serve_file(abspath, "application/javascript")
-    
+
+    def css(self, filename):
+        abspath = os.path.abspath("css/" + filename)
+        return serve_file(abspath, "text/css")
+
     # application root
     def index(self):
         template = lookup.get_template("index.html")
@@ -40,4 +44,5 @@ class Automark:
     index.exposed = True
     images.exposed = True
     js.exposed = True
+    css.exposed = True
 
