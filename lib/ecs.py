@@ -61,7 +61,6 @@ def courseAssignLogin(path):
     r = regex.match(path)
     return (r.group(1),r.group(2),r.group(3))
 
-
 def writeMarkingData(course,assignment,login,name,data):
     markingDir = "/vol/submit/" + course + "/" + assignment + "/" + login + "/marking/"
     f = open(markingDir + name + ".json","w")
