@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/local/bin/python
 
 # ============================================================
 # Path Config
@@ -7,17 +7,18 @@
 import sys
 
 sys.path.insert(0, "lib")
-sys.path.insert(0, ".")
+sys.path.insert(0, "src")
 
 # ============================================================
 # Imports
 # ============================================================
 
 import cherrypy
-import automark
+import main
 
 # ============================================================
 # Run Local HTTP Server
 # ============================================================
 
-cherrypy.quickstart(automark.Automark())
+cherrypy.quickstart(main.Main("http://localhost:8080","djp"))
+

@@ -1,0 +1,53 @@
+<%inherit file="base.html"/>
+
+<%def name="head()">
+
+<script type="text/JavaScript">
+$(document).ready(function () {
+  <!-- Populate course table-->
+  $.getJSON("/data/coordinating",function(result) { populate("tutor",result); });
+  $.getJSON("/data/coordinating",function(result) { populate("coordinating",result); });
+});
+
+function populate(tableName,tableRow) {
+   var table = document.getElementById(tableName);
+   var counter = 1;
+   $.each(tableRow,function(key,value){
+      var row=table.insertRow(-1);
+       if (counter%2 == 1) { row.id="odd"; }
+       else { row.id="even"; }
+       counter++;
+       row.insertCell(0).innerHTML=value.title;
+   });
+}  
+</script>
+
+</%def>
+
+<%def name="body()">
+
+<h1>My Tutoring</h1>
+You are tutoring the following courses:
+
+<center>
+<table id="tutor">
+  <tr>
+    <th>Course</th>
+  </tr>
+</table>
+</center>
+
+<h1>Course Coordinator</h1>
+You are coordinating the following courses:
+
+<center>
+<table id="coordinating">
+  <tr>
+    <th>Course</th>
+  </tr>
+</table>
+</center>
+
+
+</%def>
+
