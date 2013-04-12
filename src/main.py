@@ -4,9 +4,7 @@ import os
 from cherrypy.lib.static import serve_file
 import filedb
 
-import permissions
-import admin
-import courses
+import database
 
 # ============================================================
 # Mako Config
@@ -24,9 +22,7 @@ class Main(object):
     def __init__(self,root_url,username):
         self.root_url = root_url
         self.username = username
-        self.permissions = permissions.Permissions(root_url,username,"data/permissions.dat")
-        self.courses = courses.Courses(root_url,"data/courses.dat")
-        self.admin = admin.Admin(root_url,self.permissions,self.courses)
+        self.data = database.Database(username)
 
     # gives access to images/
     def images(self, filename):
