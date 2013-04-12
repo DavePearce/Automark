@@ -20,7 +20,7 @@ class Main(object):
     def __init__(self,root_url,username):
         self.root_url = root_url
         self.username = username
-        self.data = Data()
+        self.data = Data(root_url,username)
     
     # gives access to images/
     def images(self, filename):
@@ -48,8 +48,8 @@ class Main(object):
     css.exposed = True
 
 class Data(object):
-    def __init__(self):
+    def __init__(self,root_url,username):
         #self.permissions = Permissions()
         #self.permissions.exposed = True
-        self.admin = Permissions()
+        self.admin = Admin(root_url,username)
         self.admin.exposed = True
