@@ -16,32 +16,23 @@ lookup = TemplateLookup(directories=['html'])
 # Administrative Interface
 # ============================================================
 
-class Permissions(object):
+class Courses(object):
     def __init__(self,root_url,username,filename):
         self.root_url = root_url
         self.username = username
-        self.content = load(filename)
         self.exposed = True
+        self.content = load(filename)
     # select course
-    def index(self):
-        r={}
-        r["tutoring"]=[]
-        r["coordinating"]=[]
-        for c in self.content:
-            if c["user"] == self.username:
-                if c["permission"]=="tutor":
-                    r["tutoring"].append(c["course"])
-                elif c["permission"]=="coordinator":
-                    r["coordinating"].append(c["course"])
-        return json.dumps(r)
+    def index(self,id=None):
+        if id == None:
+            return json.dumps(self.content)
+        else:
+            for c in self.content:
+                if c["id"]==id:
+                    return json.dumps(c)
+            return ""
     # expose
-    index.exposed = True
-    # check permissions
-    def hasPermission(self,course,permission):
-        for c in self.content:
-            if c["course"]==course and c["user"] == self.username:                
-                return c["permission"]==permission
-        return False
+    index.exposed=True
 
 # Load a given file representing a database table.
 def load(filename):
