@@ -28,7 +28,7 @@ class Database(object):
 
     def tutoring(self):        
         return json.dumps(join("course",self.courses,select(self.permissions,{"user": self.username, "permission": "tutor"})))
-    coordinating.exposed = True 
+    tutoring.exposed = True 
 
     # --------------------------------------------------------
     # Query Functions

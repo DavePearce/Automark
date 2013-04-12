@@ -5,7 +5,7 @@
 <script type="text/JavaScript">
 $(document).ready(function () {
   <!-- Populate course table-->
-  $.getJSON("/data/coordinating",function(result) { populate("tutor",result); });
+  $.getJSON("/data/tutoring",function(result) { populate("tutoring",result); });
   $.getJSON("/data/coordinating",function(result) { populate("coordinating",result); });
 });
 
@@ -17,11 +17,14 @@ function populate(tableName,tableRow) {
        if (counter%2 == 1) { row.id="odd"; }
        else { row.id="even"; }
        counter++;
-       row.insertCell(0).innerHTML=value.title;
+       row.insertCell(0).innerHTML=value.code;
+       row.insertCell(1).innerHTML=value.number;
+       row.insertCell(2).innerHTML=value.title;
    });
 }  
 </script>
 
+<link href="${ROOT_URL}/css/index.css" rel="stylesheet" type="text/css">
 </%def>
 
 <%def name="body()">
@@ -30,20 +33,24 @@ function populate(tableName,tableRow) {
 You are tutoring the following courses:
 
 <center>
-<table id="tutor">
+<table id="tutoring">
   <tr>
     <th>Course</th>
+    <th></th>
+    <th>Title</th>
   </tr>
 </table>
 </center>
 
-<h1>Course Coordinator</h1>
+<h1>My Coordinating</h1>
 You are coordinating the following courses:
 
 <center>
 <table id="coordinating">
   <tr>
     <th>Course</th>
+    <th></th>
+    <th>Title</th>
   </tr>
 </table>
 </center>
