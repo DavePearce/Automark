@@ -25,8 +25,8 @@ class Main(object):
         self.root_url = root_url
         self.username = username
         self.permissions = permissions.Permissions(root_url,username,"data/permissions.dat")
-        self.admin = admin.Admin(root_url,self.permissions)
-        self.courses = courses.Courses(root_url,username,"data/courses.dat")
+        self.courses = courses.Courses(root_url,"data/courses.dat")
+        self.admin = admin.Admin(root_url,self.permissions,self.courses)
 
     # gives access to images/
     def images(self, filename):

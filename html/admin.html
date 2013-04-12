@@ -5,8 +5,27 @@
 
 <%def name="body()">
 
-<h1>${COURSE}</h1>
-<h1>Admin Interface</h1>
+<h1>${COURSE_CODE} ${COURSE_NUMBER} - ${COURSE_TITLE} (Admin)</h2>
+
+<h2>Assignments</h2>
+
+<center>
+<table>
+%for assignment in COURSE_ASSIGNMENTS:        
+<tr>
+<td>
+${assignment}
+</td>
+</tr>
+%endfor
+</table>
+</center>
+
+<h2>Tutors</h2>
+
+<h2>Tools</h2>
+
+</ul>
 
 </%def>
 
