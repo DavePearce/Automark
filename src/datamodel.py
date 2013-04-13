@@ -32,8 +32,14 @@ class Database(object):
     tutoring.exposed = True 
     
     def courseconfig(self,course):
+        self.checkPermission(course,"coordinator")        
         return json.dumps(load(course + "/config.dat"))
     courseconfig.exposed = True 
+
+    def assignconfig(self,course,assignment):
+        self.checkPermission(course,"coordinator")        
+        return json.dumps(load(course + "/" + assignment + "/config.dat"))
+    assignconfig.exposed = True 
     
     def submissions(self,course,assignment):
         self.checkPermission(course,"coordinator")
