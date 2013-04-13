@@ -2,9 +2,9 @@
 
 import os
 from cherrypy.lib.static import serve_file
-import filedb
 
-import database
+import datamodel
+import assignview
 
 # ============================================================
 # Mako Config
@@ -22,7 +22,8 @@ class Main(object):
     def __init__(self,root_url,username):
         self.root_url = root_url
         self.username = username
-        self.data = database.Database(username)
+        self.data = datamodel.Database(username)
+        self.assignview = assignview.Assignment(root_url,self.data)
 
     # gives access to images/
     def images(self, filename):
@@ -42,7 +43,7 @@ class Main(object):
     def index(self):
         template = lookup.get_template("index.html")
         return template.render(ROOT_URL=self.root_url,USER_NAME=self.username)
-    
+
     # exposed
     index.exposed = True
     images.exposed = True

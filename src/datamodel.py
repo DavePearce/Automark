@@ -23,18 +23,18 @@ class Database(object):
     # --------------------------------------------------------
     # Page Handlers
     # --------------------------------------------------------
-    def index(self):
-        return "GOT HERE"    
-    index.exposed = True 
-
     def coordinating(self):        
         return json.dumps(join("course",self.courses,select(self.permissions,{"user": self.username, "permission": "coordinator"})))
     coordinating.exposed = True 
-
+    
     def tutoring(self):        
         return json.dumps(join("course",self.courses,select(self.permissions,{"user": self.username, "permission": "tutor"})))
     tutoring.exposed = True 
-
+    
+    def courseconfig(self,course):
+        return json.dumps(load(course + "/config.dat"))
+    courseconfig.exposed = True 
+    
     def submissions(self,course,assignment):
         self.checkPermission(course,"coordinator")
         return json.dumps(ecs.findSubmissions(course,assignment))
@@ -48,7 +48,7 @@ class Database(object):
             if p["course"]==course and p["user"] == self.username and p["permission"]==permission:                
                 return
         raise cherrypy.HTTPError(403,"You do not have permission to access this resource")
-
+    
 # ============================================================
 # Generic data manipulation functions
 # ============================================================

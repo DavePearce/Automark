@@ -1,0 +1,48 @@
+<%inherit file="base.html"/>
+
+<%def name="head()">
+
+<script type="text/JavaScript">
+$(document).ready(function () {
+  <!-- Populate course table-->
+  $.getJSON("/data/submissions?course=${COURSE}&assignment=${ASSIGNMENT}",function(result) { populate("submissions",result); });
+});
+
+function populate(tableName,tableRow) {
+   var table = document.getElementById(tableName);
+   var counter = 1;
+   $.each(tableRow,function(key,value){
+      var row=table.insertRow(-1);
+       if (counter%2 == 1) { row.id="odd"; }
+       else { row.id="even"; }
+       counter++;
+       row.insertCell(0).innerHTML=value.id;
+       row.insertCell(1).innerHTML=value.login;
+       row.insertCell(2).innerHTML=value.name;
+   });
+}  
+</script>
+
+<link href="${ROOT_URL}/css/assignview.css" rel="stylesheet" type="text/css">
+
+</%def>
+
+<%def name="body()">
+
+<h2>/vol/submit/${COURSE}/${ASSIGNMENT}</h2>
+
+<center>
+<table id="submissions">
+  <tr>
+    <th>Student ID</th>
+    <th>Login</th>
+    <th>Name</th>
+  </tr>
+</table>
+</center>
+
+</center>
+
+
+</%def>
+
