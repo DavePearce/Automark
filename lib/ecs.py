@@ -7,25 +7,30 @@ import os
 import re
 from stat import *
 
-# ===================================================
-# Helpers for interfacing with ECS submission system
-# ===================================================
-   
+# ============================================================
+# ECS submission system interface
+# ============================================================
+
+ECS_SUBMIT_DIR="/Users/djp/scratch/submit/"
+MARKING_DIR_RE = re.compile("marking/([a-zA-Z0-9_/\ \.]*)")
+
 # determine the list of students which have submitted something
 # for a given assignment
-def submitted(course,assignment):
-    markingDir = "/vol/submit/" + course + "/" + assignment + "/"
+def findSubmissions(course,assignment):
+    markingDir = ECS_SUBMIT_DIR + course + "/" + assignment + "/"
     students = []
     for login in dircache.listdir(markingDir):
         mode = os.stat(markingDir + "/" + login)[ST_MODE]
         if not S_ISDIR(mode):
             continue; # ignore things which aren't directories.
-        students.append(login)
+        id,name = getIdName(course,assignment,login)
+        files = getSubmittedFiles(course,assignment,login)
+        students.append({"login": login, "id": id, "name": name, "files": files})
     return students
 
 # determine the name and login of a given student
-def idName(course,assignment,login):
-    markingDir = "/vol/submit/" + course + "/" + assignment + "/"
+def getIdName(course,assignment,login):
+    markingDir = ECS_SUBMIT_DIR + course + "/" + assignment + "/"
     name = "unknown"
     id = -1
     nm = re.compile("<Name>([a-zA-Z0-9_, ]*)</Name>*")
@@ -38,7 +43,7 @@ def idName(course,assignment,login):
             f = open(markingDir + login + "/marking/groupInfo.xml")
         except Exception:
             print ""
-            return (-1,"<font color=red>UNKNOWN</font>")
+            return (-1,"unknown")
     for l in f:
         if nm.match(l):
             name = nm.match(l).group(1)
@@ -46,34 +51,49 @@ def idName(course,assignment,login):
             id = idm.match(l).group(1)
     return (id,name)
 
-def course(path):
-    regex = re.compile("([a-zA-Z0-9_]+)\/")    
-    r = regex.match(path)
-    return (r.group(1))
+# determine the name and login of a given student
+def getSubmittedFiles(course,assignment,login):
+    markingDir = ECS_SUBMIT_DIR + course + "/" + assignment + "/"
+    li=[]
+    for file in findfiles(markingDir + login):
+    	if not MARKING_DIR_RE.match(file):
+	   li.append(file)
+    return li 
 
-def courseAssign(path):
-    regex = re.compile("([a-zA-Z0-9_]+)\/(Assignment_[0-9]+)")    
-    r = regex.match(path)
-    return (r.group(1),r.group(2))
+# =======================================================================
+# HELPER FUNCTIONS
+# =======================================================================
 
-def courseAssignLogin(path):
-    regex = re.compile("([a-zA-Z0-9_]+)\/(Assignment_[0-9]+)\/([a-z0-9]+)")    
-    r = regex.match(path)
-    return (r.group(1),r.group(2),r.group(3))
+# Traverse from the root, and find all files.  
+def findfiles(root):
+    r = []
+    for path,dirs,names in os.walk(root):
+        for name in names:
+            r.append(os.path.join(path,name).replace(root + "/",""))
+    return r
 
-def writeMarkingData(course,assignment,login,name,data):
-    markingDir = "/vol/submit/" + course + "/" + assignment + "/" + login + "/marking/"
-    f = open(markingDir + name + ".json","w")
-    f.write(json.dumps(data))
-    f.close()
+def matchlist(list, matcher):
+    rlist = []
+    for l in list:
+    	if matcher.match(l):
+	   rlist.append(l)
+    return rlist   
 
-def loadMarkingData(course,assignment,login,name):
-    markingDir = "/vol/submit/" + course + "/" + assignment + "/" + login + "/marking/"
-    if os.path.exists(markingDir + name + ".json"):
-        f = open(markingDir + name + ".json","r")
-        data = json.load(f)
-        f.close()
-        return data
-    else:
-        return None
-    
+# Copy files into destination directory.  Create subdirectories as
+# necessary
+def copyfiles(files,src,dest):
+    for file in files:
+        try:
+            os.makedirs(os.path.dirname(dest + file))
+        except Exception:
+            # silently do nothing
+            print ""
+        try:
+            shutil.copyfile(src + file,dest + "/" + file)
+        except Exception:
+            print ""
+        try:
+            shutil.copystat(src + file,dest + "/" + file)
+        except Exception:
+            print ""
+            

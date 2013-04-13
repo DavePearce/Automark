@@ -1,4 +1,4 @@
 [
-	{"course": "swen221_2013T1", "code": "SWEN", "number": 221, "title": "Software Development", "trimester": 1, "assignments": ["Assignment 1"] },
-	{"course": "swen222_2013T2", "code": "SWEN", "number": 222, "title": "Software Design", "trimester": 2, "assignments": [] }
+	{"course": "swen221_2012T1", "code": "SWEN", "number": 221, "title": "Software Development", "trimester": 1, "assignments": ["Assignment 1"] },
+	{"course": "swen222_2012T2", "code": "SWEN", "number": 222, "title": "Software Design", "trimester": 2, "assignments": [] }
 ]

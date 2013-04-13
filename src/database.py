@@ -3,6 +3,11 @@
 import cherrypy
 import os
 import json
+import dircache
+import re
+from stat import *
+
+import ecs
 
 # ============================================================
 # Raw Data Interface
@@ -10,8 +15,8 @@ import json
 class Database(object):
     def __init__(self,username):
         self.username = username
-        self.permissions = load("data/permissions.dat")
-        self.courses = load("data/courses.dat")
+        self.permissions = load("permissions.dat")
+        self.courses = load("courses.dat")
         self.assignments = {}
         self.exposed = True
         
@@ -21,7 +26,7 @@ class Database(object):
     def index(self):
         return "GOT HERE"    
     index.exposed = True 
-    
+
     def coordinating(self):        
         return json.dumps(join("course",self.courses,select(self.permissions,{"user": self.username, "permission": "coordinator"})))
     coordinating.exposed = True 
@@ -30,6 +35,11 @@ class Database(object):
         return json.dumps(join("course",self.courses,select(self.permissions,{"user": self.username, "permission": "tutor"})))
     tutoring.exposed = True 
 
+    def submissions(self,course,assignment):
+        self.checkPermission(course,"coordinator")
+        return json.dumps(ecs.findSubmissions(course,assignment))
+    submissions.exposed = True
+    
     # --------------------------------------------------------
     # Query Functions
     # --------------------------------------------------------
@@ -39,12 +49,9 @@ class Database(object):
                 return
         raise cherrypy.HTTPError(403,"You do not have permission to access this resource")
 
-# Load a given file representing a database table.
-def load(filename):
-    f = open(filename,"r")
-    data = json.load(f)
-    f.close()
-    return data
+# ============================================================
+# Generic data manipulation functions
+# ============================================================
 
 # Straightforward implementation of select query
 def select(table,matches):
@@ -66,3 +73,14 @@ def join(key,table1,table2):
             if row1[key] == row2[key]:
                 results.append(dict(row1.items()+row2.items()))
     return results
+
+# ============================================================
+# Table loading / writing functions
+# ============================================================
+
+# Load a given file representing a database table.
+def load(filename):
+    f = open("data/" + filename,"r")
+    data = json.load(f)
+    f.close()
+    return data
