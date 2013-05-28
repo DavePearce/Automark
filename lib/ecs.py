@@ -11,7 +11,7 @@ from stat import *
 # ECS submission system interface
 # ============================================================
 
-ECS_SUBMIT_DIR="/Users/djp/scratch/submit/"
+ECS_SUBMIT_DIR="/vol/submit/"
 MARKING_DIR_RE = re.compile("marking/([a-zA-Z0-9_/\ \.]*)")
 
 # determine the list of students which have submitted something

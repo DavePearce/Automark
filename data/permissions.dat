@@ -1,4 +1,5 @@
 [
+	{"user": "djp", "course": "swen221_2013T1", "permission": "coordinator" },
 	{"user": "djp", "course": "swen221_2012T1", "permission": "coordinator" },
 	{"user": "djp", "course": "swen222_2012T2", "permission": "tutor" }
 ]
