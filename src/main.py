@@ -75,10 +75,7 @@ class View(object):
         self.data.checkPermission(course,"coordinator")
         template = lookup.get_template("assignmentview.html")
         return template.render(ROOT_URL=self.root_url,COURSE=course,ASSIGNMENT=name)
-    
-    # exposed stuff
     assignment.exposed = True 
-
 
 # ============================================================
 # Application Entry
@@ -95,27 +92,25 @@ class Main(object):
     def images(self, filename):
         abspath = os.path.abspath("images/" + filename)
         return serve_file(abspath, "image/png")
+    images.exposed = True
     
     # gives access to js/
     def js(self, filename):
         abspath = os.path.abspath("js/" + filename)
         return serve_file(abspath, "application/javascript")
+    js.exposed = True
     
     # gives access to css/
     def css(self, filename):
         abspath = os.path.abspath("css/" + filename)
-        return serve_file(abspath, "text/css")
+        return serve_file(abspath, "text/css")    
+    css.exposed = True    
     
     # application root
     def index(self):
         template = lookup.get_template("index.html")
         return template.render(ROOT_URL=self.root_url,USER_NAME=self.username)
-
-    # exposed
     index.exposed = True
-    images.exposed = True
-    js.exposed = True
-    css.exposed = True
 
 # ============================================================
 # Helper functions
