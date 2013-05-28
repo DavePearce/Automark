@@ -50,7 +50,8 @@ class Model(object):
     
     def submissions(self,course,assignment):
         self.checkPermission(course,"coordinator")
-        return json.dumps(ecs.findSubmissions(course,assignment))
+        config = load(course + "/" + assignment + "/config.dat")
+        return json.dumps(ecs.getMarks(course,assignment,config))
     submissions.exposed = True
     
     # --- Query Functions ---

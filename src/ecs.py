@@ -24,8 +24,7 @@ def findSubmissions(course,assignment):
         if not S_ISDIR(mode):
             continue; # ignore things which aren't directories.
         id,name = getIdName(course,assignment,login)
-        files = getSubmittedFiles(course,assignment,login)
-        students.append({"login": login, "id": id, "name": name, "files": files})
+        students.append({"login": login, "id": id, "name": name})
     return students
 
 # determine the name and login of a given student
@@ -59,6 +58,26 @@ def getSubmittedFiles(course,assignment,login):
     	if not MARKING_DIR_RE.match(file):
 	   li.append(file)
     return li 
+
+def getTaskMark(course,assignment,login,stage):
+    stageDir = ECS_SUBMIT_DIR + course + "/" + assignment + "/" + login + "/marking/automark/" + stage
+    # First, check whether any errors were produced by stage
+    try:
+        f = open(stageDir + "/run.status")
+        status = f.read()
+        f.close()
+    except Exception:
+        return "?"
+    return status
+
+# generate the master list of all assignment data
+def getMarks(course,assignment,config):
+    submissions = findSubmissions(course,assignment)
+    for s in submissions:
+        login = s["login"]
+        for task in config["tasks"]:
+            s[task]=getTaskMark(course,assignment,login,task)
+    return submissions
 
 # =======================================================================
 # HELPER FUNCTIONS
