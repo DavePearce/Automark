@@ -27,7 +27,6 @@ class Model(object):
         self.username = username
         self.permissions = load("permissions.dat")
         self.courses = load("courses.dat")
-        self.assignments = {}
         self.exposed = True
         
     # --- Page Handlers ---
