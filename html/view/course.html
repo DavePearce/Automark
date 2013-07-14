@@ -2,6 +2,26 @@
 
 <%def name="head()">
 
+<script type="text/JavaScript">
+$(document).ready(function () {
+  <!-- Populate course table-->
+  $.getJSON("/data/config?course=${COURSE}",function(result) { populate("assignments",result); });
+});
+
+function populate(tableName,tableRow) {
+   var table = document.getElementById(tableName);
+   var counter = 1;
+   $.each(tableRow.assignments,function(key,value){
+      var row=table.insertRow(-1);
+       if (counter%2 == 1) { row.id="odd"; }
+       else { row.id="even"; }
+       counter++;
+       row.insertCell(0).innerHTML=value;
+       row.insertCell(1).innerHTML="<a href=\"" + value + "\">view</a>";
+   });
+}  
+</script>
+
 <link href="${ROOT_URL}/css/assignview.css" rel="stylesheet" type="text/css">
 
 </%def>
@@ -9,6 +29,17 @@
 <%def name="body()">
 
 <h2>/vol/submit/${COURSE}/</h2>
+
+<h1>Assignments</h1>
+
+<center>
+<table id="assignments">
+  <tr>
+    <th>Assignment</th>
+    <th>Actions</th>
+  </tr>
+</table>
+</center>
 
 </%def>
 
