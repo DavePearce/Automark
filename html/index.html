@@ -20,6 +20,7 @@ function populate(tableName,tableRow) {
        row.insertCell(0).innerHTML=value.code;
        row.insertCell(1).innerHTML=value.number;
        row.insertCell(2).innerHTML=value.title;
+       row.insertCell(3).innerHTML="<a href=\"view/" + value.course + "\">view</a>";
    });
 }  
 </script>
@@ -51,6 +52,7 @@ You are coordinating the following courses:
     <th>Course</th>
     <th></th>
     <th>Title</th>
+    <th>Actions</th>
   </tr>
 </table>
 </center>
