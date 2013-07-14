@@ -62,22 +62,6 @@ class Model(object):
         raise cherrypy.HTTPError(403,"You do not have permission to access this resource")
 
 # ============================================================
-# Application Views
-# ============================================================
-
-class View(object):
-    def __init__(self,root_url,data):
-        self.root_url=root_url
-        self.data = data
-        self.exposed = True
-        
-    def assignment(self,course,name):
-        self.data.checkPermission(course,"coordinator")
-        template = lookup.get_template("assignmentview.html")
-        return template.render(ROOT_URL=self.root_url,COURSE=course,ASSIGNMENT=name)
-    assignment.exposed = True 
-
-# ============================================================
 # Application Entry
 # ============================================================
 
@@ -86,8 +70,18 @@ class Main(object):
         self.root_url = root_url
         self.username = username
         self.data = Model(username)
-        self.view = View(root_url,self.data)
+        #self.view = View(root_url,self.data)
 
+    def view(self,course,name=None):
+        if name == None:
+            template = lookup.get_template("view/course.html")
+            return template.render(ROOT_URL=self.root_url,COURSE=course)
+        else:
+            self.data.checkPermission(course,"coordinator")
+            template = lookup.get_template("view/assignment.html")
+            return template.render(ROOT_URL=self.root_url,COURSE=course,ASSIGNMENT=name)
+    view.exposed = True 
+    
     # gives access to images/
     def images(self, filename):
         abspath = os.path.abspath("images/" + filename)
