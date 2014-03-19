@@ -74,21 +74,34 @@ class Main(object):
     # Application Data
     # --------------------------------------------------------
     
-    # Retrieve course specific data (e.g. settings)
+    # Retrieve course specific data (e.g. settings) which is visible
+    # to the course coordinator.  For example, the list of assignments
+    # and/or tutors is visible to the course coordinator.  Likewise,
+    # the full list of enrollements.
     def course(self,course,table):
-        return json.dumps(load("data/" + year + "/" + table + ".dat"))
+        # checkPermission(self,course,["coordinator"])        
+        return json.dumps(load("data/" + course + "/" + table + ".dat"))
     course.exposed = True
 
-    # Retrieve allocation of tutors to students for marking.  This is
-    # a list of student ID's for the given tutor, representing those
-    # students the tutor must mark.
-    def tutor_allocation(self,course,assignment):
-        #checkPermission(self,course,["tutor","coordinator"])
-        # Load table of allocations
-        allocation = load("data/" + course + "/" + assignment + "/tutor-allocation.dat")
-        # Return allocations of user only
-        return json.dumps(select(allocation,{"tutor": self.username}))
-    tutor_allocation.exposed = True
+    # Retrieve assignment specific data (e.g. settings) which is
+    # visible to the course coordinator.  For example, the marksheet
+    # data is visible to the course coordinator.  Likewise, the
+    # configuration of marking tasks.
+    def assignment(self,course,assignment,table):
+        # checkPermission(self,course,["coordinator"])        
+        return json.dumps(load("data/" + course + "/" + assignment
+                               + "/" + table + ".dat"))
+    assignment.exposed = True
+
+    # Retrieve assignment data relevant to tutors for marking student
+    # assignments.  For example, the allocation table is a list of
+    # student ID's for the given tutor, representing those students
+    # the tutor must mark.
+    def tutor(self,course,assignment,table):
+        # checkPermission(self,course,["tutor"])
+        return json.dumps(load("data/" + course + "/" + assignment
+                               + "/" + self.username + "/" + table + ".dat"))
+    tutor.exposed = True
 
     # --------------------------------------------------------
     # Authentication
