@@ -11,8 +11,8 @@ from stat import *
 # ECS submission system interface
 # ============================================================
 
-#ECS_SUBMIT_DIR="/vol/submit/"
-ECS_SUBMIT_DIR="/Users/djp/scratch/submit/"
+ECS_SUBMIT_DIR="/vol/submit/"
+#ECS_SUBMIT_DIR="/Users/djp/scratch/submit/"
 MARKING_DIR_RE = re.compile("marking/([a-zA-Z0-9_/\ \.]*)")
 
 # determine the list of students which have submitted something
@@ -25,7 +25,8 @@ def findSubmissions(course,assignment):
         if not S_ISDIR(mode):
             continue; # ignore things which aren't directories.
         id,name = getIdName(course,assignment,login)
-        students.append({"login": login, "id": id, "name": name})
+        files = getSubmittedFiles(course,assignment,login)
+        students.append({"login": login, "id": id, "name": name, "files": files})
     return students
 
 # determine the name and login of a given student

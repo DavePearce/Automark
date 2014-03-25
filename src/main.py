@@ -3,6 +3,7 @@
 import os
 from cherrypy.lib.static import serve_file
 import json
+import ecs
 
 # ============================================================
 # Mako Config
@@ -65,43 +66,51 @@ class Main(object):
     # Application Views
     # --------------------------------------------------------
     
-    def view(self,year):
-        template = lookup.get_template("index.html")
-        return template.render(ROOT_URL=self.root_url,YEAR=year)        
+    def view(self,template,course=None,assignment=None,tutor=None):
+        template = lookup.get_template(template + ".html")
+        return template.render(ROOT_URL=self.root_url,
+                               COURSE=course,       
+                               ASSIGNMENT=assignment,
+                               TUTOR=tutor)        
     view.exposed = True
 
     # --------------------------------------------------------
     # Application Data
     # --------------------------------------------------------
     
-    # Retrieve course specific data (e.g. settings) which is visible
+    # Retrieve course configuration data (i.e. settings) which are visible
     # to the course coordinator.  For example, the list of assignments
-    # and/or tutors is visible to the course coordinator.  Likewise,
-    # the full list of enrollements.
-    def course(self,course,table):
+    # and/or tutors is visible to the course coordinator.
+    def course(self,course):
         # checkPermission(self,course,["coordinator"])        
-        return json.dumps(load("data/" + course + "/" + table + ".dat"))
+        return json.dumps(load("data/" + course + "/config.dat"))
     course.exposed = True
 
-    # Retrieve assignment specific data (e.g. settings) which is
-    # visible to the course coordinator.  For example, the marksheet
-    # data is visible to the course coordinator.  Likewise, the
-    # configuration of marking tasks.
-    def assignment(self,course,assignment,table):
+    # Retrieve assignment configuration data (i.e. settings) which is
+    # visible to the course coordinator.  For example, the list of actions 
+    # is visible to the course coordinator.
+    def assignment(self,course,assignment):
         # checkPermission(self,course,["coordinator"])        
         return json.dumps(load("data/" + course + "/" + assignment
-                               + "/" + table + ".dat"))
+                               + "/config.dat"))
     assignment.exposed = True
 
-    # Retrieve assignment data relevant to tutors for marking student
-    # assignments.  For example, the allocation table is a list of
-    # student ID's for the given tutor, representing those students
-    # the tutor must mark.
-    def tutor(self,course,assignment,table):
+    # Retrieve the list of submissions for a given assignment which is
+    # visible to the course coordinator.  This includes the student ID 
+    # and name of each submission, along with a list of the submitted 
+    # files.
+    def submissions(self,course,assignment):
+        # checkPermission(self,course,["coordinator"])        
+        return json.dumps(ecs.findSubmissions(course,assignment))
+    submissions.exposed = True
+
+    # Retrieve the marking sheet data for this assignment, which is 
+    # visible to the tutors.
+    def marksheet(self,course,assignment):
         # checkPermission(self,course,["tutor"])
         return json.dumps(load("data/" + course + "/" + assignment
-                               + "/" + self.username + "/" + table + ".dat"))
-    tutor.exposed = True
+                               + "/marksheet.dat"))
+    marksheet.exposed = True
 
     # --------------------------------------------------------
     # Authentication
