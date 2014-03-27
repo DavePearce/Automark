@@ -31,7 +31,12 @@ function populateRow(table,data,headings) {
  * and in which order.
  */
 function populateTable(table,data,headings) {
-    var studentsTable = document.getElementById("students");
+    // First, create headings
+    var header = table.createTHead().insertRow(0);
+    for(i = 0; i < headings.length;++i) {
+	header.insertCell(i).innerHTML="<b>" + headings[i] + "</b>"
+    }    
+    // Second, populate data
     $.each(data,function(key,value){
        populateRow(table,value,headings);
     });    
