@@ -101,7 +101,8 @@ class Main(object):
     # files.
     def submissions(self,course,assignment):
         # checkPermission(self,course,["coordinator"])        
-        return json.dumps(ecs.findSubmissions(course,assignment))
+        config=load("data/" + course + "/" + assignment + "/config.dat")
+        return json.dumps(ecs.findSubmissions(course,assignment,config))
     submissions.exposed = True
 
     # Retrieve the marking sheet data for this assignment, which is 

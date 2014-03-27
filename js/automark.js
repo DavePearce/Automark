@@ -21,7 +21,11 @@ function populateRow(table,data,headings) {
   else { row.id="even"; }
   for(i = 0; i < headings.length;++i) {
       var heading = headings[i];
-      row.insertCell(i).innerHTML=data[heading];
+      var item = data[heading];
+      if(typeof item == 'undefined') {
+	  item = "";
+      } 
+      row.insertCell(i).innerHTML=item;
   }
 }
 

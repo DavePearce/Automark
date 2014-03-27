@@ -7,7 +7,7 @@
 
 $(document).ready(function () {
   // First, get assignment configuration and determine marking pipeline.
-  var headings = ["id","name","login"];
+  var headings = ["id","name","login","files"];
   $.getJSON("${ROOT_URL}/assignment/${COURSE}/${ASSIGNMENT}",function(config) {
     headings = headings.concat(config["tasks"]);
   });

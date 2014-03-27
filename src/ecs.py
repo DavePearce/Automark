@@ -16,17 +16,27 @@ ECS_SUBMIT_DIR="/vol/submit/"
 MARKING_DIR_RE = re.compile("marking/([a-zA-Z0-9_/\ \.]*)")
 
 # determine the list of students which have submitted something
-# for a given assignment
-def findSubmissions(course,assignment):
+# for a given assignment, along with the current marks and status 
+# recorded for each task.
+def findSubmissions(course,assignment,config):
     markingDir = ECS_SUBMIT_DIR + course + "/" + assignment + "/"
     students = []
     for login in dircache.listdir(markingDir):
         mode = os.stat(markingDir + "/" + login)[ST_MODE]
         if not S_ISDIR(mode):
-            continue; # ignore things which aren't directories.
+            continue; # ignore things which aren't directories.        
         id,name = getIdName(course,assignment,login)
         files = getSubmittedFiles(course,assignment,login)
-        students.append({"login": login, "id": id, "name": name, "files": files})
+        record = {
+            "login": login, 
+            "id": id, 
+            "name": name, 
+            "files": len(files)
+        }
+        tasks = getMarks(course,assignment,login,config)
+        for k in tasks:
+            record[k]=tasks[k]
+        students.append(record)
     return students
 
 # determine the name and login of a given student
@@ -72,14 +82,12 @@ def getTaskMark(course,assignment,login,stage):
         return "?"
     return status
 
-# generate the master list of all assignment data
-def getMarks(course,assignment,config):
-    submissions = findSubmissions(course,assignment)
-    for s in submissions:
-        login = s["login"]
-        for task in config["tasks"]:
-            s[task]=getTaskMark(course,assignment,login,task)
-    return submissions
+# generate the list of marks for all stages in the assignment configuration.
+def getMarks(course,assignment,login,config):
+    marks = {};
+    for task in config["tasks"]:
+        marks[task]=getTaskMark(course,assignment,login,task)
+    return marks
 
 # =======================================================================
 # HELPER FUNCTIONS
