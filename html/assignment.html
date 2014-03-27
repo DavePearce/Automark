@@ -7,7 +7,7 @@
 
 $(document).ready(function () {
   $.getJSON("${ROOT_URL}/submissions/${COURSE}/${ASSIGNMENT}",function(submissions) {
-    populateTables(staff,courses,students,supervision,teaching);
+    populateTable("submissions",submissions,"id","name","login");
   });
 });
 
@@ -20,17 +20,13 @@ $(document).ready(function () {
 </%def>
 
 <center>
-<table class="data" id="staff">
+<table class="data" id="submissions">
   <thead>
     <tr>
+      <th>Student ID</th>
       <th>Name</th>
-      <th>Group</th>
-      <th>Effective FTE</th>
-      <th>Research</th>
-      <th>Teaching</th>
-      <th>Admin</th>
-      <th>New?</th>
-      <th>Notes</th>
+      <th>Login</th>
+      <th>Submitted Files</th>
     </tr>
   </thead>
   <tbody>
