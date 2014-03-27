@@ -24,6 +24,12 @@ $(document).ready(function () {
   });
 });
 
+function runTask() {
+ var selector = document.getElementById("taskSelector");
+ var selected = selector.options[selector.selectedIndex];
+ alert("Run Task " + selected.text);
+}
+
 </script>
 
 </%def>
@@ -42,7 +48,7 @@ $(document).ready(function () {
 <div id="toolbar">
   <button type="button">Select All</button>
   <button type="button">E-Mail</button>
-  <button type="button">Run Task:</button>
+  <button type="button" onClick="runTask()">Run Task:</button>
   <select id="taskSelector"></select> 
 </div>
 
