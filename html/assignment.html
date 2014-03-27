@@ -1,18 +1,23 @@
 <%inherit file="base.html"/>
 
 <%def name="head()">
-
-<script type="text/javascript" src="${ROOT_URL}/js/automark.js"></script>
 <script type="text/javascript">
 
 $(document).ready(function () {
-  // First, get assignment configuration and determine marking pipeline.
+  // First, get assignment configuration from network
   var headings = ["id","name","login","files"];
   $.getJSON("${ROOT_URL}/assignment/${COURSE}/${ASSIGNMENT}",function(config) {
-    headings = headings.concat(config["tasks"]);
+    var tasks = config["tasks"];
+    headings = headings.concat(tasks);
+    var selector = document.getElementById("taskSelector");
+    for(var i = 0; i < tasks.length;++i) {
+        var option = document.createElement("option");
+	option.text = tasks[i];
+        selector.add(option);
+    }
   });
 
-  // Second, populate the main table for this page.
+  // Second, get submission information from network and populate display table
   var table = document.getElementById("submissions");
   $.getJSON("${ROOT_URL}/submissions/${COURSE}/${ASSIGNMENT}",function(submissions) {
     populateTable(table,submissions,headings);
@@ -24,11 +29,21 @@ $(document).ready(function () {
 </%def>
 
 <%def name="body()">
+
 <h2>${COURSE}/ ${ASSIGNMENT}</h2>
 
-<center>
-<table class="data" id="submissions">
-</table>
-</center>
+<div id="display">
+  <center>
+    <table class="data" id="submissions">
+    </table>
+  </center>
+</div>
+
+<div id="toolbar">
+  <button type="button">Select All</button>
+  <button type="button">E-Mail</button>
+  <button type="button">Run Task:</button>
+  <select id="taskSelector"></select> 
+</div>
 
 </%def>
