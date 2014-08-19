@@ -29,9 +29,7 @@ function runTask() {
  var selected = selector.options[selector.selectedIndex];
  alert("Run Task " + selected.text);
 }
-
 </script>
-
 </%def>
 
 <%def name="body()">
@@ -45,11 +43,24 @@ function runTask() {
   </center>
 </div>
 
-<div id="toolbar">
-  <button type="button">Select All</button>
-  <button type="button">E-Mail</button>
-  <button type="button" onClick="runTask()">Run Task:</button>
-  <select id="taskSelector"></select> 
-</div>
+<ul class="dropdown">
+  <li><a href="#">For Facilities</a>
+    <ul class="sub_menu">
+      <li><a href="#">Artificial Turf</a></li>
+      <li>
+        <a href="#">Batting Cages</a>
+        <ul>
+          <li><a href="#">Indoor</a></li>
+          <li><a href="#">Outdoor</a></li>
+        </ul>
+      </li>
+      <li><a href="#">Benches &amp; Bleachers</a></li>
+    </ul>
+  </li>
+</ul>
+
+<button type="button" onClick="runTask()">Run Task:</button>
+<select id="taskSelector"></select> 
+
 
 </%def>
