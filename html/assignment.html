@@ -4,6 +4,7 @@
 <script type="text/javascript">
 
 $(document).ready(function () {
+  // makeMenuBar();
   // First, get assignment configuration from network
   var headings = ["id","name","login","files"];
   $.getJSON("${ROOT_URL}/assignment/${COURSE}/${ASSIGNMENT}",function(config) {
@@ -34,6 +35,21 @@ function runTask() {
 
 <%def name="body()">
 
+<ul class="menubar">
+  <li><a href="#">Admin</a>
+    <ul>
+      <li><a href="#">Create Assignment</a></li>
+      <li><a href="#">Create Marksheet</a></li>
+    </ul>
+  </li>
+  <li><a href="#">Email</a>
+    <ul>
+      <li><a href="#">Students</a></li>
+      <li><a href="#">Tutors</a></li>
+    </ul>
+  </li>
+</ul>
+
 <h2>${COURSE}/ ${ASSIGNMENT}</h2>
 
 <div id="display">
@@ -42,22 +58,6 @@ function runTask() {
     </table>
   </center>
 </div>
-
-<ul class="dropdown">
-  <li><a href="#">For Facilities</a>
-    <ul class="sub_menu">
-      <li><a href="#">Artificial Turf</a></li>
-      <li>
-        <a href="#">Batting Cages</a>
-        <ul>
-          <li><a href="#">Indoor</a></li>
-          <li><a href="#">Outdoor</a></li>
-        </ul>
-      </li>
-      <li><a href="#">Benches &amp; Bleachers</a></li>
-    </ul>
-  </li>
-</ul>
 
 <button type="button" onClick="runTask()">Run Task:</button>
 <select id="taskSelector"></select> 
