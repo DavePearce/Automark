@@ -4,7 +4,6 @@
 <script type="text/javascript">
 
 $(document).ready(function () {
-  // makeMenuBar();
   // First, get assignment configuration from network
   var headings = ["id","name","login","files"];
   $.getJSON("${ROOT_URL}/assignment/${COURSE}/${ASSIGNMENT}",function(config) {
