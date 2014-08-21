@@ -12,7 +12,7 @@ body {
 }
 
 #header {
-    background: #dddddd;
+    background: #f2f2f2;
     padding: 1em 1em 1em 1em;
 }
 
@@ -69,6 +69,76 @@ body {
  }
 
 /* ====================================================== */
-/* Menu Bar */
+/* Menu Bar: Top Level */
 /* ====================================================== */
 
+ul.menubar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    float: left;
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #ccc; 
+    font-size: 10pt;
+} 
+
+ul.menubar > li {
+    display: inline;
+    float: left;
+    margin-left: 10px;
+}
+
+ul.menubar > li > a:link, ul.menubar > li > a:visited {
+    display: block;
+    color: #000000;
+    text-align: left;
+    padding: 4px;
+    text-decoration: none;
+}
+
+ul.menubar > li > a:hover, ul.menubar > li > a:active {
+    background-color: #fff;
+    color: #c00;
+}
+
+/* ====================================================== */
+/* Menu Bar: Other Levels */
+/* ====================================================== */
+
+ul.menubar > li ul {
+    display: block;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ccc;
+    visibility: hidden;
+    position: absolute;
+    display: none;
+    box-shadow: 2px 2px 2px 0 #000;
+}
+
+ul.menubar li:hover > ul {
+    visibility: visible;
+    display: block;
+}
+
+ul.menubar > li > ul li {
+    display: inline;
+    padding: 0;
+    margin: 0;
+}
+
+ul.menubar > li > ul li a:link,a:visited {
+    display: block;
+    min-width: 120px;
+    color: #000000;
+    background-color: #EEEEEE;
+    padding: 5px 50px 5px 10px;
+    text-align: left;
+    text-decoration: none;
+}
+
+ul.menubar > li > ul li a:hover,a:active {
+    background-color: #fff;
+}
