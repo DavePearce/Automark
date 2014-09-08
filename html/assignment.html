@@ -22,6 +22,9 @@ $(document).ready(function () {
   $.getJSON("${ROOT_URL}/submissions/${COURSE}/${ASSIGNMENT}",function(submissions) {
     populateTable(table,submissions,headings);
   });
+  
+  // Mark the tabs appropriately
+  $("#tabs").tabs(); 
 });
 
 function runTask() {
@@ -29,22 +32,72 @@ function runTask() {
  var selected = selector.options[selector.selectedIndex];
  alert("Run Task " + selected.text);
 }
+
 </script>
+</%def>
+
+<%def name="menu()">
+<ul class="menubar">
+  <li><a href="#">Course</a>
+    <ul>
+      <li><a href="#">Configure</a></li>
+      <li><a href="#">Create ...</a>
+	<ul>
+	  <li><a href="#">Assignment</a></li>	
+	</ul>
+      </li>
+      <li><a href="#">Export</a></li>
+      <li><a href="#">Import</a></li>       
+    </ul>
+  </li>
+  <li><a href="#">Assignment</a>
+    <ul>
+      <li><a href="#">Add Marksheet</a></li>
+      <li><a href="#">Add Task</a></li>
+      <li><a href="#">Remove Task</a></li>
+    </ul>
+  </li>
+  <li><a href="#">Tasks</a>
+    <ul>
+      <li><a href="#">Compile</a></li>
+      <li><a href="#">Part 1</a></li>
+    </ul>
+  </li>
+  <li><a href="#">Notify</a>
+    <ul>
+      <li><a href="#">Students</a></li>
+      <li><a href="#">Selected students</a></li>
+      <li><a href="#">Tutors</a></li>
+      <li><a href="#">Build Reports</a></li>
+      <li><a href="#">Email Reports</a></li>
+    </ul>
+  </li>
+</ul>	  
 </%def>
 
 <%def name="body()">
 
-<h2>${COURSE}/ ${ASSIGNMENT}</h2>
+<h2>${COURSE} / ${ASSIGNMENT}</h2>
 
-<div id="display">
-  <center>
-    <table class="data" id="submissions">
-    </table>
-  </center>
+<div id="tabs">
+  <ul>
+    <li><a href="#tabs-summary">Summary</a></li>
+    <li><a href="#tabs-grades">Grades</a></li>
+    <li><a href="#tabs-marks">Marks</a></li>    
+  </ul>
+
+  <div id="tabs-summary">
+  </div>
+  
+  <div id="tabs-grades">
+  </div>
+  
+  <div id="tabs-marks">
+    <center>
+      <table class="data" id="submissions">
+      </table>
+    </center>
+  </div>
 </div>
-
-<button type="button" onClick="runTask()">Run Task:</button>
-<select id="taskSelector"></select> 
-
 
 </%def>
