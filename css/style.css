@@ -12,8 +12,9 @@ body {
 }
 
 #header {
-    background: #f2f2f2;
-    padding: 1em 1em 1em 1em;
+    background: #d2f2f2;
+    padding: 0.5em 1em 0.25em 1em;
+    border-bottom: 1px solid black;
 }
 
 #menu {
@@ -34,7 +35,7 @@ body {
 }
 
 #content {
-    padding: 1em;
+    padding: 0.5em;
     font-family: 'Pontano Sans', Verdana, Helvetica, sans-serif;
     font-size: 11pt;
 }
@@ -69,18 +70,32 @@ body {
  }
 
 /* ====================================================== */
+/* Display Tabs (Generic) */
+/* ====================================================== */
+
+div #tabs {
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+    width: 100%;
+}
+
+/* ====================================================== */
 /* Menu Bar: Top Level */
 /* ====================================================== */
 
 ul.menubar {
     list-style-type: none;
-    margin: 0;
-    padding: 0;
+    margin: 0px;
+    padding: 0px;
     width: 100%;
-    float: left;
+    position: fixed;
+    left: 0;
+    top: 0;
     background-color: #f2f2f2;
     border-bottom: 1px solid #ccc; 
     font-size: 10pt;
+    z-index: 5;
 } 
 
 ul.menubar > li {
@@ -91,7 +106,6 @@ ul.menubar > li {
 
 ul.menubar > li > a:link, ul.menubar > li > a:visited {
     display: block;
-    color: #000000;
     text-align: left;
     padding: 4px;
     text-decoration: none;
@@ -112,6 +126,7 @@ ul.menubar > li ul {
     padding: 0;
     margin: 0;
     border: 1px solid #ccc;
+    color: #000000;
     visibility: hidden;
     position: absolute;
     display: none;

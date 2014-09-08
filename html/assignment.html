@@ -24,7 +24,7 @@ $(document).ready(function () {
   });
   
   // Mark the tabs appropriately
-  $("#tabs").tabs(); 
+  $("#tabs").tabs();
 });
 
 function runTask() {
@@ -72,12 +72,14 @@ function runTask() {
       <li><a href="#">Email Reports</a></li>
     </ul>
   </li>
-</ul>	  
+</ul>
+</%def>
+
+<%def name="location()">
+${COURSE} / ${ASSIGNMENT}
 </%def>
 
 <%def name="body()">
-
-<h2>${COURSE} / ${ASSIGNMENT}</h2>
 
 <div id="tabs">
   <ul>
