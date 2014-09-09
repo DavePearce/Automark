@@ -1,41 +1,5 @@
 <%inherit file="base.html"/>
 
-<%def name="head()">
-<script type="text/javascript">
-
-$(document).ready(function () {
-  // First, get assignment configuration from network
-  var headings = ["id","name","login","files"];
-  $.getJSON("${ROOT_URL}/assignment/${COURSE}/${ASSIGNMENT}",function(config) {
-    var tasks = config["tasks"];
-    headings = headings.concat(tasks);
-    var selector = document.getElementById("taskSelector");
-    for(var i = 0; i < tasks.length;++i) {
-        var option = document.createElement("option");
-	option.text = tasks[i];
-        selector.add(option);
-    }
-  });
-
-  // Second, get submission information from network and populate display table
-  var table = document.getElementById("submissions");
-  $.getJSON("${ROOT_URL}/submissions/${COURSE}/${ASSIGNMENT}",function(submissions) {
-    populateTable(table,submissions,headings);
-  });
-  
-  // Mark the tabs appropriately
-  $("#tabs").tabs();
-});
-
-function runTask() {
- var selector = document.getElementById("taskSelector");
- var selected = selector.options[selector.selectedIndex];
- alert("Run Task " + selected.text);
-}
-
-</script>
-</%def>
-
 <%def name="menu()">
 <ul class="menubar">
   <li><a href="#">Course</a>
@@ -64,10 +28,9 @@ function runTask() {
   </li>
   <li><a href="#">Assignment</a>
     <ul>
-      <li><a href="#">Summary</a></li>      
-      <li><a href="#">Grades</a></li>
-      <li><a href="#">Marks</a></li>
-      <li><a href="#">Submissions</a></li>            
+      <li><a href="${ROOT_URL}/view/grades/${COURSE}/${ASSIGNMENT}">Grades</a></li>
+      <li><a href="${ROOT_URL}/view/marks/${COURSE}/${ASSIGNMENT}">Marks</a></li>
+      <li><a href="${ROOT_URL}/view/submissions/${COURSE}/${ASSIGNMENT}">Submissions</a></li>            
       <li><hr/></li>            
       <li><a href="#">Configure...</a>
       <ul>
@@ -101,18 +64,4 @@ function runTask() {
     </ul>
   </li>
 </ul>
-</%def>
-
-<%def name="location()">
-${COURSE} / ${ASSIGNMENT}
-</%def>
-
-<%def name="body()">
-
-<center>
-<table class="data" id="submissions">
-</table>
-</center>
-</div>
-
 </%def>

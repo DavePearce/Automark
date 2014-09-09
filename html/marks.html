@@ -1,0 +1,42 @@
+<%inherit file="assignment.html"/>
+
+<%def name="head()">
+<script type="text/javascript">
+
+$(document).ready(function () {
+  // First, get assignment configuration from network
+  var headings = ["id","name","login","files"];
+  $.getJSON("${ROOT_URL}/assignment/${COURSE}/${ASSIGNMENT}",function(config) {
+    var tasks = config["tasks"];
+    headings = headings.concat(tasks);
+    var selector = document.getElementById("taskSelector");
+    for(var i = 0; i < tasks.length;++i) {
+        var option = document.createElement("option");
+	option.text = tasks[i];
+        selector.add(option);
+    }
+  });
+});
+
+function runTask() {
+ var selector = document.getElementById("taskSelector");
+ var selected = selector.options[selector.selectedIndex];
+ alert("Run Task " + selected.text);
+}
+
+</script>
+</%def>
+
+<%def name="location()">
+${COURSE} / ${ASSIGNMENT} (Marks)
+</%def>
+
+<%def name="body()">
+
+<center>
+<table class="data" id="marks">
+</table>
+</center>
+</div>
+
+</%def>

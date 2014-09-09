@@ -1,0 +1,29 @@
+<%inherit file="assignment.html"/>
+
+<%def name="head()">
+<script type="text/javascript">
+
+$(document).ready(function () {
+  // First, get assignment configuration from network
+  var headings = ["id","name","login","Raw Mark","Late Penalty","Final Mark","Grade"];
+  var table = document.getElementById("grades");
+  $.getJSON("${ROOT_URL}/grades/${COURSE}/${ASSIGNMENT}",function(grades) {
+    populateTable(table,grades,headings);
+  });
+});
+</script>
+</%def>
+
+<%def name="location()">
+${COURSE} / ${ASSIGNMENT} (Grades)
+</%def>
+
+<%def name="body()">
+
+<center>
+<table class="data" id="grades">
+</table>
+</center>
+</div>
+
+</%def>
