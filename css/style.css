@@ -136,12 +136,12 @@ ul.menubar > li ul {
 ul.menubar li:hover > ul {
     visibility: visible;
     display: block;
+    color: #000000;
+    background-color: #EEEEEE;
 }
 
 ul.menubar > li > ul li {
-    display: inline;
-    padding: 0;
-    margin: 0;
+    display: block;
 }
 
 ul.menubar > li > ul li a:link,a:visited {
@@ -149,11 +149,16 @@ ul.menubar > li > ul li a:link,a:visited {
     min-width: 120px;
     color: #000000;
     background-color: #EEEEEE;
-    padding: 5px 50px 5px 10px;
+    padding: 5px 10px 5px 10px;
     text-align: left;
     text-decoration: none;
 }
 
 ul.menubar > li > ul li a:hover,a:active {
     background-color: #fff;
+}
+
+ul.menubar > li > ul > li > ul {
+    margin-top: -20px;
+    margin-left: 100%;
 }
