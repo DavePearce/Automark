@@ -5,7 +5,7 @@
 
 $(document).ready(function () {
   // First, get assignment configuration from network
-  var headings = ["id","name","login","files"];
+  var headings = ["Student ID","Name","Login"];
   $.getJSON("${ROOT_URL}/assignment/${COURSE}/${ASSIGNMENT}",function(config) {
     var tasks = config["tasks"];
     headings = headings.concat(tasks);
@@ -16,14 +16,13 @@ $(document).ready(function () {
         selector.add(option);
     }
   });
+  // Second, get mark information from network and populate display table
+  var table = document.getElementById("marks");
+  $.getJSON("${ROOT_URL}/marks/${COURSE}/${ASSIGNMENT}",function(marks) {
+    populateTable(table,marks,headings);
+  });
+
 });
-
-function runTask() {
- var selector = document.getElementById("taskSelector");
- var selected = selector.options[selector.selectedIndex];
- alert("Run Task " + selected.text);
-}
-
 </script>
 </%def>
 

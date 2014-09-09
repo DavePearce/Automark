@@ -5,7 +5,7 @@
 
 $(document).ready(function () {
   // Get submission information from network and populate display table
-  var headings = ["id","name","login","files"];
+  var headings = ["Student ID","Name","Login","Files","Time","Date"];
   var table = document.getElementById("submissions");
   $.getJSON("${ROOT_URL}/submissions/${COURSE}/${ASSIGNMENT}",function(submissions) {
     populateTable(table,submissions,headings);

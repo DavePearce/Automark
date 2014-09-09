@@ -105,6 +105,16 @@ class Main(object):
         return json.dumps(ecs.findSubmissions(course,assignment,config))
     submissions.exposed = True
 
+    # Retrieve the list of marks for a given assignment submission
+    # which is visible to the course coordinator.  This includes the
+    # student ID and name for each submission, along with the marks
+    # for each completed task.
+    def marks(self,course,assignment):
+        # checkPermission(self,course,["coordinator"])        
+        config=load("data/" + course + "/" + assignment + "/config.dat")
+        return json.dumps(ecs.findMarks(course,assignment,config))
+    marks.exposed = True
+
     # Retrieve the marking sheet data for this assignment, which is 
     # visible to the tutors.
     def marksheet(self,course,assignment):

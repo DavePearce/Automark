@@ -1,5 +1,6 @@
 # -*-python-*-
 
+import time
 import json
 import dircache
 import cgi
@@ -16,8 +17,7 @@ ECS_SUBMIT_DIR="/Users/djp/scratch/submit/"
 MARKING_DIR_RE = re.compile("marking/([a-zA-Z0-9_/\ \.]*)")
 
 # determine the list of students which have submitted something
-# for a given assignment, along with the current marks and status 
-# recorded for each task.
+# for a given assignment.
 def findSubmissions(course,assignment,config):
     markingDir = ECS_SUBMIT_DIR + course + "/" + assignment + "/"
     students = []
@@ -27,11 +27,38 @@ def findSubmissions(course,assignment,config):
             continue; # ignore things which aren't directories.        
         id,name = getIdName(course,assignment,login)
         files = getSubmittedFiles(course,assignment,login)
+        tim,date = determineLatestFile(markingDir,login,files)        
         record = {
-            "login": login, 
-            "id": id, 
-            "name": name, 
-            "files": len(files)
+            "Login": login, 
+            "Student ID": id, 
+            "Name": name, 
+            "Files": len(files),
+            "Date": date,
+            "Time": tim
+        }
+        # tasks = getMarks(course,assignment,login,config)
+        # for k in tasks:
+        #     record[k]=tasks[k]
+        students.append(record)
+    return students
+
+# determine the list of students which have submitted something
+# for a given assignment, along with the current marks and status 
+# recorded for each task.
+def findMarks(course,assignment,config):
+    markingDir = ECS_SUBMIT_DIR + course + "/" + assignment + "/"
+    students = []
+    for login in dircache.listdir(markingDir):
+        mode = os.stat(markingDir + "/" + login)[ST_MODE]
+        if not S_ISDIR(mode):
+            continue; # ignore things which aren't directories.        
+        id,name = getIdName(course,assignment,login)
+        files = getSubmittedFiles(course,assignment,login)
+        tim,date = determineLatestFile(markingDir,login,files)        
+        record = {
+            "Login": login, 
+            "Student ID": id, 
+            "Name": name
         }
         tasks = getMarks(course,assignment,login,config)
         for k in tasks:
@@ -92,6 +119,21 @@ def getMarks(course,assignment,login,config):
 # =======================================================================
 # HELPER FUNCTIONS
 # =======================================================================
+
+# Identify latest file in a list of files
+def determineLatestFile(markingDir,login,files):
+    timestamp = 0
+    #
+    for file in files:
+        tmp = os.path.getctime(markingDir + "/" + login + "/" + file)
+        if tmp > timestamp:
+            timestamp = tmp
+    #
+    timestamp = time.gmtime(timestamp)
+    date = time.strftime('%m/%d/%Y', timestamp)
+    tim = time.strftime('%H:%M', timestamp)
+    return tim,date
+    
 
 # Traverse from the root, and find all files.  
 def findfiles(root):
