@@ -66,12 +66,12 @@ class Main(object):
     # Application Views
     # --------------------------------------------------------
     
-    def view(self,template,course=None,assignment=None,tutor=None):
+    def view(self,template,course=None,assignment=None):
         template = lookup.get_template(template + ".html")
         return template.render(ROOT_URL=self.root_url,
+                               USER=self.username,
                                COURSE=course,       
-                               ASSIGNMENT=assignment,
-                               TUTOR=tutor)        
+                               ASSIGNMENT=assignment)        
     view.exposed = True
 
     # --------------------------------------------------------
