@@ -24,7 +24,7 @@
       <li><a href="#">Assignments...</a>
       <ul>
 	% for a in menu.assignments("${USER}","${COURSE}"):
-	<li><a href="#">${a}</a></li>
+	<li><a href="${ROOT_URL}/view/marks/${COURSE}/${a}">${a}</a></li>
 	% endfor
       </ul>
       </li>
