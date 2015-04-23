@@ -18,8 +18,15 @@ def courses(user):
 
 # Return the list of assignments a given user / course is involved in.
 def assignments(user,course):
-    return ("Hello","World")
+    return load("data/" + course + "/config.dat")["assignments"]
 
 # Return the list of tasks for a given assignment.
 def tasks(user,course,assignment):
-    return ("Hello","World")
+    return load("data/" + course + "/" + assignment + "/config.dat")["tasks"]
+
+# Load a given file representing a database table.
+def load(filename):
+    f = open(filename,"r")
+    data = json.load(f)
+    f.close()
+    return data

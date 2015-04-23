@@ -1,5 +1,9 @@
 <%inherit file="base.html"/>
 
+<%def name="head()">
+
+</%def>
+
 <%def name="menu()">
 <%!
    import menu
@@ -9,7 +13,7 @@
     <ul>
       <li><a href="#">Courses...</a>
       <ul>
-	% for c in menu.courses("${USER}"):
+	% for c in menu.courses(USER):
 	<li><a href="${ROOT_URL}/view/${c}">${c}</a></li>
         % endfor
       </ul>
@@ -23,7 +27,7 @@
     <ul>
       <li><a href="#">Assignments...</a>
       <ul>
-	% for a in menu.assignments("${USER}","${COURSE}"):
+	% for a in menu.assignments(USER,COURSE):
 	<li><a href="${ROOT_URL}/view/marks/${COURSE}/${a}">${a}</a></li>
 	% endfor
       </ul>
@@ -58,7 +62,7 @@
       <li><hr/></li>            
       <li><a href="#">Run Task...</a>      
       <ul>
-	% for t in menu.tasks("${USER}","${COURSE}","${ASSIGNMENT}"):
+	% for t in menu.tasks(USER,COURSE,ASSIGNMENT):
 	<li><a href="#">${t}</a></li>
 	% endfor
       </ul>
