@@ -16,6 +16,8 @@ import roles
 # roles --- associates logins with COURSEs and their ROLE within
 # those courses.  ROLE identifiers are: 1 = coordinator, 2 = tutor,
 # 3 = student.  COURSEs are string identifiers of the form "swen221_2014T1".
+#
+# marks --- associates logins and courses with assignment parts
 def createNewDatabase(filename):
     connection = sqlite3.connect(filename)
     cursor = connection.cursor()
@@ -24,6 +26,9 @@ def createNewDatabase(filename):
     id INT, name TEXT)''')
     # Create "roles" table
     cursor.execute('''CREATE TABLE roles(login TEXT NOT NULL, course TEXT NOT NULL, role INT NOT NULL)''')
+    # Create "marks" table
+    cursor.execute('''CREATE TABLE marks(login TEXT NOT NULL, course TEXT NOT NULL, assignment INT NOT NULL, part INT NOT NULL)''')
+    # Commit all changes    
     # Commit all changes
     connection.commit()
     # done
