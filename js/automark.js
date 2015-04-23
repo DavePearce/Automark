@@ -6,6 +6,31 @@
  */
 
 // ===============================================================
+// Task helpers
+// ===============================================================
+
+/**
+ * Determine the set of selected students in a given table of
+ * students.  The current assumption is that the login is the third
+ * index in the table.
+ */
+function getSelectedStudents(table) {
+    var selected = [];
+    for (var i = 1, row; row = table.rows[i]; i++) {
+	selected.push(row.cells[2].innerHTML);
+    }
+    return selected;
+}
+
+/**
+ * Run a selected task on the server.  User must have permission for 
+ * this operation.
+ */
+function runTask(course,assignment,task,students) {
+    alert("TASK " + students);
+}
+
+// ===============================================================
 // GUI Helpers
 // ===============================================================
 

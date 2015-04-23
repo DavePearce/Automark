@@ -17,7 +17,7 @@ $(document).ready(function () {
     }
   });
   // Second, get mark information from network and populate display table
-  var table = document.getElementById("marks");
+  var table = document.getElementById("students");
   $.getJSON("${ROOT_URL}/marks/${COURSE}/${ASSIGNMENT}",function(marks) {
     populateTable(table,marks,headings);
   });
@@ -33,7 +33,7 @@ ${COURSE} / ${ASSIGNMENT} (Marks)
 <%def name="body()">
 
 <center>
-<table class="data" id="marks">
+<table class="data" id="students">
 </table>
 </center>
 </div>

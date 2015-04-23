@@ -63,7 +63,8 @@
       <li><a href="#">Run Task...</a>      
       <ul>
 	% for t in menu.tasks(USER,COURSE,ASSIGNMENT):
-	<li><a href="#">${t}</a></li>
+	<li><a href="#"
+	onclick="runTask('${COURSE}','${ASSIGNMENT}','${t}', getSelectedStudents(students));">${t}</a></li>
 	% endfor
       </ul>
       <li><hr/></li>            
