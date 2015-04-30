@@ -123,6 +123,15 @@ class Main(object):
                                + "/marksheet.dat"))
     marksheet.exposed = True
 
+    # Run a given task for a given student in a given course and
+    # assignment.  This will produce a mark which is recorded in the
+    # database, along with any supplmentary information (i.e. error
+    # messages).
+    def run(self,course,assignment,login,task):
+        return json.dumps(ecs.runTask(course,assignment,login,task))
+    run.exposed = True
+        
+
     # --------------------------------------------------------
     # Authentication
     # --------------------------------------------------------

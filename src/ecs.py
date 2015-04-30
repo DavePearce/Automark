@@ -116,6 +116,61 @@ def getMarks(course,assignment,login,config):
         marks[task]=getTaskMark(course,assignment,login,task)
     return marks
 
+def runTask(course,assignment,login,task):
+    markingDir = ECS_SUBMIT_DIR + course + "/" + assignment + "/"
+    build_dir = markingDir + login + "/marking/automark/" + task + "/"    
+    # ======================================================
+    # First, check whether the automark directory is created
+    # ======================================================
+    if not os.path.exists(markingDir + login + "/marking/automark"):       
+        try:
+            os.mkdir(markingDir + login + "/marking/automark")
+        except Exception:
+            return {error: str(Exception)}
+    # ==============================================================
+    # Second, clean existing automark/stage directory, or create one
+    # ==============================================================
+    sys.stdout.flush()
+    if os.path.exists(build_dir):
+        print "[cleaning " + stage + " dir]"
+        sys.stdout.flush()
+    try:
+        shutil.rmtree(build_dir)
+    except Exception:
+        log(login,"FAILED STAGE",stage);
+        print " <font color=red>FAILED 2 (" + str(Exception) + ")</font><br>"
+        continue        
+    else:
+        print "[creating " + stage + " dir]"
+        try:
+            os.mkdir(build_dir)
+        except Exception:
+            log(login,"FAILED STAGE: " + stage,str(Exception));
+            print " <font color=red>FAILED 3 (" + str(Exception) + ")</font><br>"
+            continue
+    # ============================================= 
+    # Fourth, copy stage files into its directory
+    # ============================================= 
+    build_files = findfiles(CONFIG_DIR + stage)
+    print "[copying " + stage + " files]"
+    sys.stdout.flush()
+    try:
+        copyfiles(build_files,CONFIG_DIR+stage+"/",build_dir)
+    except Exception:
+        log(login,"FAILED STAGE: " + stage,str(Exception));
+        print " <font color=red>FAILED 4 (" + str(Exception) + ")</font><br>"
+        continue
+    # =============================================== 
+    # Fourth, run stage in its directory
+    # ===============================================             
+    print "[running " + stage + " script]"
+    sys.stdout.flush()
+    if os.EX_OK != os.system("cd \"" + build_dir + "\" ; " + "./run.sh"):
+        log(login,"FAILED STAGE: " + stage,str("System exec"));
+        print " <font color=red>FAILED 5 (" + str(Exception) + ")</font><br>"
+    else:
+        log(login,"COMPLETED STAGE",stage);
+        
 # =======================================================================
 # HELPER FUNCTIONS
 # =======================================================================
