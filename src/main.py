@@ -128,7 +128,10 @@ class Main(object):
     # database, along with any supplmentary information (i.e. error
     # messages).
     def run(self,course,assignment,login,task):
-        return json.dumps(ecs.runTask(course,assignment,login,task))
+        try:
+            return json.dumps(ecs.runTask(course,assignment,login,task))
+        except Exception as e:
+            return str(e) 
     run.exposed = True
         
 

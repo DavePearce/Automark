@@ -5,6 +5,7 @@ import json
 import dircache
 import cgi
 import os
+import shutil
 import re
 from stat import *
 
@@ -12,8 +13,8 @@ from stat import *
 # ECS submission system interface
 # ============================================================
 
-#ECS_SUBMIT_DIR="/vol/submit/"
-ECS_SUBMIT_DIR="/Users/djp/scratch/submit/"
+ECS_SUBMIT_DIR="/vol/submit/"
+#ECS_SUBMIT_DIR="/Users/djp/scratch/submit/"
 MARKING_DIR_RE = re.compile("marking/([a-zA-Z0-9_/\ \.]*)")
 
 # determine the list of students which have submitted something
@@ -116,64 +117,31 @@ def getMarks(course,assignment,login,config):
         marks[task]=getTaskMark(course,assignment,login,task)
     return marks
 
+# run a given task for a given student in a given assignment course
 def runTask(course,assignment,login,task):
     markingDir = ECS_SUBMIT_DIR + course + "/" + assignment + "/"
-    build_dir = markingDir + login + "/marking/automark/" + task + "/"    
-    # ======================================================
-    # First, check whether the automark directory is created
-    # ======================================================
-    if not os.path.exists(markingDir + login + "/marking/automark"):       
-        try:
-            os.mkdir(markingDir + login + "/marking/automark")
-        except Exception:
-            return {error: str(Exception)}
-    # ==============================================================
-    # Second, clean existing automark/stage directory, or create one
-    # ==============================================================
-    sys.stdout.flush()
-    if os.path.exists(build_dir):
-        print "[cleaning " + stage + " dir]"
-        sys.stdout.flush()
-    try:
-        shutil.rmtree(build_dir)
-    except Exception:
-        log(login,"FAILED STAGE",stage);
-        print " <font color=red>FAILED 2 (" + str(Exception) + ")</font><br>"
-        continue        
-    else:
-        print "[creating " + stage + " dir]"
-        try:
-            os.mkdir(build_dir)
-        except Exception:
-            log(login,"FAILED STAGE: " + stage,str(Exception));
-            print " <font color=red>FAILED 3 (" + str(Exception) + ")</font><br>"
-            continue
-    # ============================================= 
-    # Fourth, copy stage files into its directory
-    # ============================================= 
-    build_files = findfiles(CONFIG_DIR + stage)
-    print "[copying " + stage + " files]"
-    sys.stdout.flush()
-    try:
-        copyfiles(build_files,CONFIG_DIR+stage+"/",build_dir)
-    except Exception:
-        log(login,"FAILED STAGE: " + stage,str(Exception));
-        print " <font color=red>FAILED 4 (" + str(Exception) + ")</font><br>"
-        continue
-    # =============================================== 
-    # Fourth, run stage in its directory
-    # ===============================================             
-    print "[running " + stage + " script]"
-    sys.stdout.flush()
-    if os.EX_OK != os.system("cd \"" + build_dir + "\" ; " + "./run.sh"):
-        log(login,"FAILED STAGE: " + stage,str("System exec"));
-        print " <font color=red>FAILED 5 (" + str(Exception) + ")</font><br>"
-    else:
-        log(login,"COMPLETED STAGE",stage);
+    targetDir = markingDir + login + "/marking/automark/" + task
+    taskDir = "data/" + course + "/" + assignment + "/" + task
+    # If task directory does not exist, create it
+    createEmptyDirectory(targetDir)
+    # Copy task files over
+    taskFiles = findfiles(taskDir)
+    copyfiles(taskFiles,taskDir,targetDir)
+    # Run the task
+    return os.system("cd \"" + targetDir + "\" ; " + "./run.sh")    
         
 # =======================================================================
 # HELPER FUNCTIONS
 # =======================================================================
+
+# Create an empty directory.  If the directory already exists, then remove it.
+def createEmptyDirectory(dir):
+    # 
+    if os.path.exists(dir):
+        # Aready exists, so remove it
+        shutil.rmtree(dir)
+    # Doesn't exist here, so make it
+    os.makedirs(dir)
 
 # Identify latest file in a list of files
 def determineLatestFile(markingDir,login,files):
@@ -210,17 +178,16 @@ def matchlist(list, matcher):
 def copyfiles(files,src,dest):
     for file in files:
         try:
-            os.makedirs(os.path.dirname(dest + file))
+            os.makedirs(os.path.dirname(dest + "/" + file))
         except Exception:
-            # silently do nothing
-            print ""
+            pass
         try:
-            shutil.copyfile(src + file,dest + "/" + file)
-        except Exception:
-            print ""
+            shutil.copyfile(src + "/" + file,dest + "/" + file)
+        except Exception as e:
+            continue
         try:
-            shutil.copystat(src + file,dest + "/" + file)
+            shutil.copystat(src + "/" + file,dest + "/" + file)
         except Exception:
-            print ""
+            continue
             
 
