@@ -4,6 +4,7 @@ import os
 from cherrypy.lib.static import serve_file
 import json
 import ecs
+import simpledb
 
 # ============================================================
 # Mako Config
@@ -31,6 +32,9 @@ class Main(object):
         # We immediately select those permission relevant for this
         # user, since we don't care about others.
         self.permissions = select(load("data/permissions.dat"),{"user": self.username})
+        # Create a database handle, which will be passed between
+        # different functions.
+        self.database = simpledb.Database("data/")
 
     # --------------------------------------------------------
     # Standard resources (images, js, html, etc)
@@ -71,7 +75,8 @@ class Main(object):
         return template.render(ROOT_URL=self.root_url,
                                USER=self.username,
                                COURSE=course,       
-                               ASSIGNMENT=assignment)        
+                               ASSIGNMENT=assignment,
+                               DATABASE=self.database)        
     view.exposed = True
 
     # --------------------------------------------------------
@@ -83,7 +88,7 @@ class Main(object):
     # and/or tutors is visible to the course coordinator.
     def course(self,course):
         # checkPermission(self,course,["coordinator"])        
-        return json.dumps(load("data/" + course + "/config.dat"))
+        return json.dumps(self.database.course(self.username,course))
     course.exposed = True
 
     # Retrieve assignment configuration data (i.e. settings) which is
@@ -91,8 +96,7 @@ class Main(object):
     # is visible to the course coordinator.
     def assignment(self,course,assignment):
         # checkPermission(self,course,["coordinator"])        
-        return json.dumps(load("data/" + course + "/" + assignment
-                               + "/config.dat"))
+        return json.dumps(self.database.assignment(self.username,course,assignment))
     assignment.exposed = True
 
     # Retrieve the list of submissions for a given assignment which is
@@ -101,8 +105,7 @@ class Main(object):
     # files.
     def submissions(self,course,assignment):
         # checkPermission(self,course,["coordinator"])        
-        config=load("data/" + course + "/" + assignment + "/config.dat")
-        return json.dumps(ecs.findSubmissions(course,assignment,config))
+        return json.dumps(self.database.submissions(self.username,course,assignment))
     submissions.exposed = True
 
     # Retrieve the list of marks for a given assignment submission
@@ -111,16 +114,14 @@ class Main(object):
     # for each completed task.
     def marks(self,course,assignment):
         # checkPermission(self,course,["coordinator"])        
-        config=load("data/" + course + "/" + assignment + "/config.dat")
-        return json.dumps(ecs.findMarks(course,assignment,config))
+        return json.dumps(self.database.marks(self.username,course,assignment))
     marks.exposed = True
 
     # Retrieve the marking sheet data for this assignment, which is 
     # visible to the tutors.
     def marksheet(self,course,assignment):
         # checkPermission(self,course,["tutor"])
-        return json.dumps(load("data/" + course + "/" + assignment
-                               + "/marksheet.dat"))
+        return json.dumps(self.database.marksheet(self.username,course,assignment))
     marksheet.exposed = True
 
     # Run a given task for a given student in a given course and
