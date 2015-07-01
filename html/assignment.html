@@ -64,7 +64,7 @@
       <ul>
 	% for t in DATABASE.assignment(USER,COURSE,ASSIGNMENT)["tasks"]:
 	<li><a href="#"
-	onclick="runTask('${COURSE}','${ASSIGNMENT}','${t}', getSelectedStudents(students));">${t}</a></li>
+	onclick="runTask('${ROOT_URL}/run/${COURSE}/${ASSIGNMENT}/${t}/', getSelectedStudents($('students')[0]));">${t}</a></li>
 	% endfor
       </ul>
       <li><hr/></li>            

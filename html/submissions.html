@@ -3,14 +3,22 @@
 <%def name="head()">
 <script type="text/javascript">
 
-$(document).ready(function () {
-  // Get submission information from network and populate display table
+function initialiseTable(data) {
   var headings = ["Student ID","Name","Login","Files","Time","Date"];
-  var table = document.getElementById("submissions");
-  // Make our table selectable
-  $.getJSON("${ROOT_URL}/submissions/${COURSE}/${ASSIGNMENT}",function(submissions) {
-    populateTable(table,submissions,headings);
-    $(".data>thead").selectable({filter: "tr"});
+  var table = $(".data")[0];
+  // populate table
+  populateTable(table,data,headings);
+  // make table selectable
+  $(".data>tbody").selectable({filter: "tr"});
+  // make even rows coloured
+  $("tr:even").attr("id","even");
+  $("tr:odd").attr("id","odd");
+};
+
+$(document).ready(function () {
+  // read data off the network
+  $.getJSON("${ROOT_URL}/submissions/${COURSE}/${ASSIGNMENT}",function(data) {
+    initialiseTable(data);
   });
 });
 </script>

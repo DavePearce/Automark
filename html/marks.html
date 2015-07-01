@@ -2,24 +2,25 @@
 
 <%def name="head()">
 <script type="text/javascript">
+function initialiseTable(config,data) {
+  // Get submission information from network and populate display table
+  var tasks = config["tasks"];
+  var headings = ["Student ID","Name","Login"].concat(tasks);
+  var table = $(".data")[0];
+  // populate table
+  populateTable(table,data,headings);
+  // make table selectable
+  $(".data>tbody").selectable({filter: "tr"});
+  // make even rows coloured
+  $("tr:even").attr("id","even");
+  $("tr:odd").attr("id","odd");
+};
 
 $(document).ready(function () {
-  // First, get assignment configuration from network
-  var headings = ["Student ID","Name","Login"];
   $.getJSON("${ROOT_URL}/assignment/${COURSE}/${ASSIGNMENT}",function(config) {
-    var tasks = config["tasks"];
-    headings = headings.concat(tasks);
-    var selector = document.getElementById("taskSelector");
-    for(var i = 0; i < tasks.length;++i) {
-        var option = document.createElement("option");
-	option.text = tasks[i];
-        selector.add(option);
-    }
-  });
-  // Second, get mark information from network and populate display table
-  var table = document.getElementById("students");
-  $.getJSON("${ROOT_URL}/marks/${COURSE}/${ASSIGNMENT}",function(marks) {
-    populateTable(table,marks,headings);
+    $.getJSON("${ROOT_URL}/marks/${COURSE}/${ASSIGNMENT}",function(marks) {
+      initialiseTable(config,marks);
+    });
   });
 });
 </script>

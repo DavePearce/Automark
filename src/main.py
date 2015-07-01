@@ -128,7 +128,7 @@ class Main(object):
     # assignment.  This will produce a mark which is recorded in the
     # database, along with any supplmentary information (i.e. error
     # messages).
-    def run(self,course,assignment,login,task):
+    def run(self,course,assignment,task,login):
         try:
             return json.dumps(ecs.runTask(course,assignment,login,task))
         except Exception as e:

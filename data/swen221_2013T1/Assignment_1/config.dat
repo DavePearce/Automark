@@ -1,1 +1,1 @@
-{ "tasks": ["Compile","Part1"] }
+{ "tasks": ["TestTask","Compile","Part1"] }
