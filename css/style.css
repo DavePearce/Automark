@@ -80,6 +80,15 @@ div #tabs {
     width: 100%;
 }
 
+.ui-selectable>.ui-selected {
+    background: #F39814;
+    color: white;
+}
+
+.ui-selectable>.ui-selecting {
+    background: #FECA40;
+}
+
 /* ====================================================== */
 /* Menu Bar: Top Level */
 /* ====================================================== */

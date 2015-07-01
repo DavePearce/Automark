@@ -7,8 +7,10 @@ $(document).ready(function () {
   // Get submission information from network and populate display table
   var headings = ["Student ID","Name","Login","Files","Time","Date"];
   var table = document.getElementById("submissions");
+  // Make our table selectable
   $.getJSON("${ROOT_URL}/submissions/${COURSE}/${ASSIGNMENT}",function(submissions) {
     populateTable(table,submissions,headings);
+    $(".data>thead").selectable({filter: "tr"});
   });
 });
 </script>
