@@ -21,12 +21,11 @@ import roles
 def createNewDatabase(filename):
     connection = sqlite3.connect(filename)
     cursor = connection.cursor()
-    # Create "users" table
-    cursor.execute('''CREATE TABLE users(login TEXT NOT NULL PRIMARY KEY,
-    id INT, name TEXT)''')
-    # Create "roles" table
+    # Create "Users" table
+    cursor.execute('''CREATE TABLE users(login TEXT NOT NULL PRIMARY KEY, id INT, name TEXT)''')
+    # Create "Roles" table
     cursor.execute('''CREATE TABLE roles(login TEXT NOT NULL, course TEXT NOT NULL, role INT NOT NULL)''')
-    # Create "marks" table
+    # Create "Marks" table
     cursor.execute('''CREATE TABLE marks(login TEXT NOT NULL, course TEXT NOT NULL, assignment INT NOT NULL, part INT NOT NULL)''')
     # Commit all changes    
     # Commit all changes
