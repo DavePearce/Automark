@@ -1,8 +1,11 @@
 # -*-python-*-
 
 import os
+# CherryPy
 from cherrypy.lib.static import serve_file
 from cherrypy import request
+# Application
+import data
 
 # ============================================================
 # Mako Config
@@ -11,50 +14,7 @@ from cherrypy import request
 from mako.template import Template
 from mako.lookup import TemplateLookup
 lookup = TemplateLookup(directories=['html'])
-
-# ===================================================================
-# Application Resource.  This is a helper class which provides a
-# RESTful resource interface.  Specifically, it allows application
-# objects to be built which respond to GET/PUT requersts, etc in the
-# appropriate fashion.
-# ===================================================================
-
-class Resource(object):
-    # --------------------------------------------------------
-    # Resource Root
-    # --------------------------------------------------------
-    def index(self,**kwargs):
-        if request.method == "GET":
-            return self.GET(kwargs)
-        else:
-            return self.PUT(kwargs)            
-    index.exposed = True
-
-# ===================================================================
-# Application Table.  A table provides a RESTful interface to an
-# underlying database table.
-# ===================================================================
-
-class Table(Resource):
-    
-    def __init__(self,table):
-        # The table is used to identify the database table to which
-        # this resource corresponds.
-        self.table = table
-
-    # -------------------------------------------------------------
-    # Table GET.  Return the contents of this resource, potentially
-    # with a query applied as given by the arguments.
-    # -------------------------------------------------------------
-    def GET(self,kwargs):
-        return "GOT HERE: " + str(kwargs)
-
-    # -------------------------------------------------------------
-    # Table PUT
-    # -------------------------------------------------------------
-    def PUT(self):
-        return "PUT HERE"
-        
+       
 # =================================================================
 # Application Entry.  This is the entry point for this application,
 # and serves all routes.  
@@ -117,7 +77,7 @@ class Main(object):
     # Application Data
     # -------------------------------------------------------------
     
-    courses = Table("courses")
+    users = data.Table(data.User)
 
  
 
